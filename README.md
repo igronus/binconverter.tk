@@ -16,17 +16,21 @@ http://binconverter.tk/?bin=01000000111000110011110011010000&type=float
 
 http://binconverter.tk/?bin=00100110&type=int
 
-Supported types (for now): float, init, uint.
+Supported types (for now): float, int, uint.
 
 ## Installation
 
-Python 2 needed. Here are instructions to get bitstring module work on Ubuntu:
+Python 2 (+bitstring) needed. Here are instructions to get bitstring module work on Ubuntu:
 
 ```
 sudo apt-get install python-setuptools
 sudo easy_install pip
 sudo pip install bitstring
 ```
+
+Just clone this repo and run `python server.py`. You'll get your web-server on 8080 port (by default). Then make requests as it shown in Usage section.
+
+### Some real world case
 
 To make it work on the same machine with Apache:
 
@@ -39,12 +43,10 @@ To make it work on the same machine with Apache:
 </VirtualHost>
 ```
 
-Note that proxy_http mod must be enabled. If not, try do it with `sudo a2enmod proxy_http`.
-
-Just clone this repo and run `python server.py`. You'll get your web-server on 8080 port (by default).
+Note that proxy_http mod must be enabled. If not, try do it with `sudo a2enmod proxy_http`. As a side effect you can add some custom tag/ip/id (e.g. `?bin=00100110&type=int&device_id=d41d&register=0xF1`) to analyze data through access.log later, for example.
 
 ## TODO
 
-Make port readable from config. Fix some errors. Change how-to-use message. Write unit tests. 
+Make port readable from config. Write unit tests. Make be able to run as console application. List all available types in syntax message.
 
 Commits are welcome!
