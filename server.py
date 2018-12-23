@@ -1,10 +1,11 @@
 #!/usr/bin/python
 from BaseHTTPServer import BaseHTTPRequestHandler,HTTPServer
-#import cgi
 import urlparse
 from bitstring import BitArray
+import re
 
 PORT_NUMBER = 8080
+
 
 #This class will handles any incoming request from
 #the browser 
@@ -16,25 +17,27 @@ class myHandler(BaseHTTPRequestHandler):
 		self.send_header('Content-type','text/html')
 		self.end_headers()
 
-		# Send the html message
-		#self.wfile.write("Hello World !")
-
-		# form = cgi.FieldStorage()
 		o = urlparse.urlparse(self.path)
 		form = urlparse.parse_qs(o.query)
-		#self.wfile.write(form.getvalue("foo"))
-
 		
 		key1 = 'bin'
 		key2 = 'type'
 		if key1 in form and key2 in form:
-			#BitArray(bin=form[key1][0]).int
-			#self.wfile.write(form[key1][0])
-			# self.wfile.write(BitArray(bin=form[key1][0]).uint)
-			#self.wfile.write(BitArray(bin=form[key1][0]).{form[key2][0]})
-			self.wfile.write(getattr(BitArray(bin=form[key1][0]), form[key2][0]))
+			binary_number = form[key1][0]
+			binary_type = form[key2][0]
+
+			# TODO
+			# re.match(r"^(0|1)+$", binary_number)
+
+			try:
+				result = getattr(BitArray(bin=binary_number), binary_type)
+			except Exception, e:
+				self.wfile.write(str(e))
+			else:
+				self.wfile.write(result)
 		else:
-			self.wfile.write('syntax: /?bin=1001&type=uint')
+			syntax_msg = "Syntax: /?bin=(1|0)+&type=(float|int|uint)"
+			self.wfile.write(syntax_msg)
 
 		return
 
